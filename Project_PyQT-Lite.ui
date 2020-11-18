@@ -146,13 +146,13 @@
     <string/>
    </property>
   </widget>
-  <widget class="QPlainTextEdit" name="plainTextEdit">
+  <widget class="QLineEdit" name="output">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>560</y>
+     <x>2</x>
+     <y>569</y>
      <width>991</width>
-     <height>191</height>
+     <height>51</height>
     </rect>
    </property>
   </widget>
