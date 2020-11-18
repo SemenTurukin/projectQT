@@ -9,17 +9,15 @@ class Window(QMainWindow):
     def __init__(self):
         super(Window, self).__init__()
         uic.loadUi("Project_PyQT-Lite.ui", self)
+        self.pushButton.clicked.connect(self.search_number)
+        self.con = sqlite3.connect("Project.db")
 
     def search_number(self):
-        self.pushButton.clicked.connect(self.select_data)
-        num = self.number.setPlainText("SELECT * FROM Base_cars")
-        self.con = sqlite3.connect("Project.db")
         cur = self.con.cursor()
-        number = self.number
-        if self.search.clicked:
-            res = cur.execute("""SELECT * FROM Base_cars
-                    WHERE number = ? and reg > ?""", (self.number, self.reg)).fetchall()
-            self.plainTextEdit.add(res)
+        query = f"SELECT * FROM Base_cars WHERE number = '{self.number.text()}' and reg = '{self.reg.text()}'"
+        print(query)
+        res = cur.execute(query).fetchall()
+        print(res)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
