@@ -37,6 +37,11 @@ class Window(QMainWindow):
         else:
             self.output.setText("Некорректный ввод")
 
+    def show_window_2(self):
+        self.w2 = Window2()
+        self.w2.show()
+
+
     def search_vin_number(self):
         cur = self.con.cursor()
         query = f"SELECT * FROM Base_cars WHERE VIN_number = '{self.vin_number.text()}'"
