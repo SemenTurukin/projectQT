@@ -49,8 +49,13 @@ class Window(QMainWindow):
         res = cur.execute(query).fetchall()
         print(res)
 
-if __name__ == "__main__":
+def except_hook(cls, exception, traceback):
+    sys.__excepthook__(cls, exception, traceback)
+
+
+if __name__ == '__main__':
     app = QApplication(sys.argv)
-    wnd = Window()
-    wnd.show()
-    sys.exit(app.exec_())
+    form = Window()
+    form.show()
+    sys.excepthook = except_hook
+    sys.exit(app.exec())
