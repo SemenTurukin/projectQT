@@ -16,7 +16,7 @@ class Window(QMainWindow):
         super(Window, self).__init__()
         uic.loadUi("Project_PyQT-Lite.ui", self)
         self.pushButton.clicked.connect(self.search_number)
-        self.con = sqlite3.connect("Project.db")
+        self.con = sqlite3.connect("project")
 
     def search_number(self):
         cur = self.con.cursor()
