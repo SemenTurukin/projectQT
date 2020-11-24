@@ -4,6 +4,12 @@ import sqlite3
 from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow, QApplication
 
+class Mistake(QMainWindow):
+    def __init__(self):
+        super(Mistake, self).__init__()
+        self.setWindowTitle('Mistake')
+        uic.loadUi("mistake.ui", self)
+
 class Window2(QMainWindow):
     def __init__(self):
         super(Window2, self).__init__()
@@ -14,7 +20,7 @@ class Window2(QMainWindow):
 class Window(QMainWindow):
     def __init__(self):
         super(Window, self).__init__()
-        uic.loadUi("Project_PyQT-Lite.ui", self)
+        uic.loadUi("Project_PyQT.ui", self)
         self.pushButton.clicked.connect(self.search_number)
         self.con = sqlite3.connect("project.db")
 
@@ -22,8 +28,11 @@ class Window(QMainWindow):
         cur = self.con.cursor()
         query = f"SELECT * FROM Base_cars WHERE number = '{self.number.text()}' and reg = '{self.reg.text()}'"
         res = cur.execute(query).fetchall()
-        if len(res) > 1:
-            self.connect(self.show_window_2)
+        if res:
+            self.setWindowTitle('Window2')
+            uic.loadUi("svodka_project.ui", self)
+            self.Window2 = Window2()
+            self.Window2.show()
             self.name.setText(res[0])
             self.vin.setText(res[1])
             self.power.setText(res[2])
@@ -34,14 +43,10 @@ class Window(QMainWindow):
             self.weight.setText(res[7])
             self.dtp.setText(res[8])
             self.taxi.setText(res[9])
-            self.show_window_2()
         else:
+            self.mistake = Mistake()
+            self.mistake.show()
             self.output.setText("Некорректный ввод")
-
-    def show_window_2(self):
-        self.w2 = Window2()
-        self.w2.show()
-
 
     def search_vin_number(self):
         cur = self.con.cursor()
