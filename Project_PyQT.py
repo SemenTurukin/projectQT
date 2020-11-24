@@ -16,7 +16,7 @@ class Window(QMainWindow):
         super(Window, self).__init__()
         uic.loadUi("Project_PyQT-Lite.ui", self)
         self.pushButton.clicked.connect(self.search_number)
-        self.con = sqlite3.connect("project")
+        self.con = sqlite3.connect("project.db")
 
     def search_number(self):
         cur = self.con.cursor()
@@ -34,6 +34,7 @@ class Window(QMainWindow):
             self.weight.setText(res[7])
             self.dtp.setText(res[8])
             self.taxi.setText(res[9])
+            self.show_window_2()
         else:
             self.output.setText("Некорректный ввод")
 
