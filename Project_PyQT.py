@@ -46,7 +46,6 @@ class Window(QMainWindow):
         else:
             self.mistake = Mistake()
             self.mistake.show()
-            self.output.setText("Некорректный ввод")
 
     def search_vin_number(self):
         cur = self.con.cursor()
