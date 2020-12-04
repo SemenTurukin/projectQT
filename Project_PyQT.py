@@ -35,11 +35,13 @@ class Window(QMainWindow):
         super(Window, self).__init__()
         uic.loadUi("Project_PyQT.ui", self)
         self.pushButton.clicked.connect(self.search_number)
+        self.pushButton.clicked.connect(self.admin)
         self.con = sqlite3.connect("project.db")
 
     def search_number(self):
         cur = self.con.cursor()
-        query = f"SELECT * FROM Base_cars WHERE number = '{self.number.text()}' and reg = '{self.reg.text()}'"
+        query = f"SELECT * FROM Base_cars WHERE number = '{self.number.text()}' and reg = '{self.reg.text()}'" \
+                f"or VIN_number = '{self.vin_number.text()}'"
         res = cur.execute(query).fetchall()
         if res:
             self.setWindowTitle('Window2')
@@ -50,21 +52,7 @@ class Window(QMainWindow):
             self.mistake = Mistake()
             self.mistake.show()
 
-    def search_vin_number(self):
-        cur = self.con.cursor()
-        q = f"SELECT * FROM Base_cars WHERE VIN_number = '{self.vin_number.text()}'"
-        res = cur.execute(q).fetchall()
-        if len(res) > 1:
-            self.setWindowTitle('Window2')
-            uic.loadUi("svodka_project.ui", self)
-            self.Window2 = Window2(res[0])
-            self.Window2.show()
-        else:
-            self.mistake = Mistake()
-            self.mistake.show()
-
     def adm_menu(self):
-        self.pushButton.clicked.connect(self.admin)
         self.Admin_menu = Admin_menu()
         self.Admin_menu.show()
 
