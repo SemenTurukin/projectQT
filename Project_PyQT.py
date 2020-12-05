@@ -35,7 +35,7 @@ class Window(QMainWindow):
         super(Window, self).__init__()
         uic.loadUi("Project_PyQT.ui", self)
         self.pushButton.clicked.connect(self.search_number)
-        self.pushButton.clicked.connect(self.admin)
+        self.admin.clicked.connect(self.adm_menu)
         self.con = sqlite3.connect("project.db")
 
     def search_number(self):
@@ -60,11 +60,13 @@ class Admin_menu(QMainWindow):
     def __init__(self):
         super(Admin_menu, self).__init__()
         uic.loadUi("admin_menu.ui", self)
-        self.pushButton.clicked.connect(self.admin)
-        cur = self.con.cursor()
+        self.add.clicked.connect(self.addnumber)
+        self.delete_2.clicked.connect(self.delete_number)
+        self.redactor.clicked.connect(self.editnumber)
+        self.con = sqlite3.connect("project.db")
+
 
     def delete_number(self):
-        self.pushButton.clicked.connect(self.delete)
         cur = self.con.cursor()
         query = f"SELECT * FROM Base_cars WHERE number = '{self.number.text()}' and reg = '{self.reg.text()}'"
         res = cur.execute(query).fetchall()
@@ -72,24 +74,21 @@ class Admin_menu(QMainWindow):
             f"DELETE FROM table WHERE {res}"
 
     def addnumber(self):
-        self.pushButton.clicked.connect(self.add)
-        cur = self.con.cursor()
-        if len(self.number.text()) == 6 and 2 <=len(self.reg.text) <= 3:
+        if self.number.text() == 6 and 2 <= self.reg.text() <= 3:
             self.setWindowTitle('edit')
             uic.loadUi("edit.ui", self)
             self.Add = Add()
             self.Add.show()
 
     def editnumber(self):
-        self.pushButton.clicked.connect(self.redactor)
-        cur = self.con.cursor()
         query = f"SELECT * FROM Base_cars WHERE number = '{self.number.text()}' and reg = '{self.reg.text()}'"
+        cur = self.con.cursor()
         res = cur.execute(query).fetchall()
         if res:
             self.setWindowTitle('Edit')
             uic.loadUi("edit.ui", self)
-            self.Window2 = Window2(res[0])
-            self.Window2.show()
+            self.Edit = Edit(res[0])
+            self.Edit.show()
         else:
             self.mistake = Mistake()
             self.mistake.show()
@@ -98,17 +97,15 @@ class Add(QMainWindow):
     def __init__(self):
         super(Add, self).__init__()
         uic.loadUi("edit.ui", self)
-        self.pushButton.clicked.connect(self.save)
+        self.save.clicked.connect(self.add_number)
         self.con = sqlite3.connect("project.db")
 
     def add_number(self):
-        cur = self.con.cursor()
-        if self.save.clicked():
-            f"INSERT INTO Base_cars (number, reg, name auto, VIN number, power, workingV, year, color, " \
-            f"peoples, weight, DTP, taxi) VALUES('{self.number.text()}', '{self.reg.text()}'), '{self.name.text()}', " \
-            f"'{self.vin.text()}', '{self.power.text()}', '{self.workV.text()}', '{self.year.text()}', " \
-            f"'{self.color.text()}', '{self.people.text()}', '{self.weight.text()}', '{self.dtp.text()}'," \
-            f"'{self.taxi.text()}'"
+        f"INSERT INTO Base_cars (number, reg, name auto, VIN number, power, workingV, year, color, " \
+        f"peoples, weight, DTP, taxi) VALUES('{self.number.text()}', '{self.reg.text()}'), '{self.name.text()}', " \
+        f"'{self.vin.text()}', '{self.power.text()}', '{self.workV.text()}', '{self.year.text()}', " \
+        f"'{self.color.text()}', '{self.people.text()}', '{self.weight.text()}', '{self.dtp.text()}'," \
+        f"'{self.taxi.text()}'"
 
 class Edit(QMainWindow):
     def __init__(self):
