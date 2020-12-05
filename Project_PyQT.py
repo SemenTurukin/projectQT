@@ -72,6 +72,9 @@ class Admin_menu(QMainWindow):
         res = cur.execute(query).fetchall()
         if res:
             f"DELETE FROM table WHERE {res}"
+        else:
+            self.mistake = Mistake()
+            self.mistake.show()
 
     def addnumber(self):
         if self.number.text() == 6 and 2 <= self.reg.text() <= 3:
@@ -87,7 +90,7 @@ class Admin_menu(QMainWindow):
         if res:
             self.setWindowTitle('Edit')
             uic.loadUi("edit.ui", self)
-            self.Edit = Edit(res[0])
+            self.Edit = Edit()
             self.Edit.show()
         else:
             self.mistake = Mistake()
@@ -111,8 +114,9 @@ class Edit(QMainWindow):
     def __init__(self):
         super(Edit, self).__init__()
         uic.loadUi("edit.ui", self)
-        self.pushButton.clicked.connect(self.save)
+        self.save.clicked.connect(self.edit_number)
         self.con = sqlite3.connect("project.db")
+        self.init()
 
     def edit_number(self):
         cur = self.con.cursor()
