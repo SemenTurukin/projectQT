@@ -71,15 +71,18 @@ class Admin_menu(QMainWindow):
         query = f"SELECT * FROM Base_cars WHERE number = '{self.number.text()}' and reg = '{self.reg.text()}'"
         res = cur.execute(query).fetchall()
         if res:
-            f"DELETE FROM table WHERE {res}"
+            query2 = f"DELETE FROM table WHERE {res}"
+            res = cur.execute(query2).fetchall()
+            self.con.commit()
         else:
             self.mistake = Mistake()
             self.mistake.show()
 
     def addnumber(self):
         if self.number.text() == 6 and 2 <= self.reg.text() <= 3:
-            self.setWindowTitle('edit')
-            uic.loadUi("edit.ui", self)
+            self.setWindowTitle('add')
+            uic.loadUi("add.ui", self)
+            cur = self.con.cursor()
             self.Add = Add()
             self.Add.show()
 
@@ -100,15 +103,18 @@ class Add(QMainWindow):
     def __init__(self):
         super(Add, self).__init__()
         uic.loadUi("edit.ui", self)
-        self.save.clicked.connect(self.add_number)
+        self.add.clicked.connect(self.add_number)
         self.con = sqlite3.connect("project.db")
 
     def add_number(self):
-        f"INSERT INTO Base_cars (number, reg, name auto, VIN number, power, workingV, year, color, " \
+        querty = f"INSERT INTO Base_cars (number, reg, name auto, VIN number, power, workingV, year, color, " \
         f"peoples, weight, DTP, taxi) VALUES('{self.number.text()}', '{self.reg.text()}'), '{self.name.text()}', " \
         f"'{self.vin.text()}', '{self.power.text()}', '{self.workV.text()}', '{self.year.text()}', " \
         f"'{self.color.text()}', '{self.people.text()}', '{self.weight.text()}', '{self.dtp.text()}'," \
         f"'{self.taxi.text()}'"
+        cur = self.con.cursor()
+        res = cur.execute(querty).fetchall()
+        self.con.commit()
 
 class Edit(QMainWindow):
     def __init__(self):
@@ -116,16 +122,17 @@ class Edit(QMainWindow):
         uic.loadUi("edit.ui", self)
         self.save.clicked.connect(self.edit_number)
         self.con = sqlite3.connect("project.db")
-        self.init()
 
     def edit_number(self):
         cur = self.con.cursor()
-        if self.save.clicked():
-            f"REPLASE INTO Base_cars (name auto, VIN number, power, workingV, year, color, " \
-            f"peoples, weight, DTP, taxi) VALUES('{self.name.text()}', " \
-            f"'{self.vin.text()}', '{self.power.text()}', '{self.workV.text()}', '{self.year.text()}', " \
-            f"'{self.color.text()}', '{self.people.text()}', '{self.weight.text()}', '{self.dtp.text()}'," \
-            f"'{self.taxi.text()}')"
+        querty = f"REPLASE INTO Base_cars (name auto, VIN number, power, workingV, year, color, " \
+        f"peoples, weight, DTP, taxi) VALUES('{self.name.text()}', " \
+        f"'{self.vin.text()}', '{self.power.text()}', '{self.workV.text()}', '{self.year.text()}', " \
+        f"'{self.color.text()}', '{self.people.text()}', '{self.weight.text()}', '{self.dtp.text()}'," \
+        f"'{self.taxi.text()}')"
+        cur = self.con.cursor()
+        res = cur.execute(querty).fetchall()
+        self.con.commit()
 
 def except_hook(cls, exception, traceback):
     sys.__excepthook__(cls, exception, traceback)
